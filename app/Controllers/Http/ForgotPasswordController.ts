@@ -28,9 +28,16 @@ export default class ForgotPasswordController {
           .subject('Recuperação de Senha')
           .htmlView('emails/forgot_password', {
             email,
+            name: user.name,
             token: user.token,
             link: `${ctx.request.input('redirect_url')}?token=${user.token}`,
           })
+        message.textView('emails/forgot_password_plain', {
+          email,
+          name: user.name,
+          token: user.token,
+          link: `${ctx.request.input('redirect_url')}?token=${user.token}`,
+        })
       })
     } catch (err) {
       console.log(err)
