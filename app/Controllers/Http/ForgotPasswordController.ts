@@ -40,7 +40,7 @@ export default class ForgotPasswordController {
 
   public async update({ request, response }) {
     try {
-      request.validate(ResetPasswordValidator)
+      await request.validate(ResetPasswordValidator)
 
       const { token, password } = request.all()
 
