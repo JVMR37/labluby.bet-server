@@ -16,10 +16,10 @@ export default class User extends BaseModel {
   public password: string
 
   @column()
-  public token: string
+  public token: string | null
 
   @column.dateTime({ columnName: 'token_created_at' })
-  public tokenCreatedAt: DateTime
+  public tokenCreatedAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
