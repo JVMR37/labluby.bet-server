@@ -21,7 +21,11 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.post('users', 'UsersController.store')
+
 Route.post('sessions', 'SessionsController.store')
+
+Route.post('passwords', 'ForgotPasswordController.store')
+Route.put('passwords', 'ForgotPasswordController.update')
 
 Route.get('/', async () => {
   return { hello: 'world' }
