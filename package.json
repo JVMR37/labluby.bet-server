@@ -27,6 +27,7 @@
     "@adonisjs/core": "^5.1.0",
     "@adonisjs/lucid": "^15.0.3",
     "@adonisjs/mail": "^7.2.3",
+    "@adonisjs/redis": "^7.0.8",
     "@adonisjs/repl": "^3.0.0",
     "@adonisjs/session": "^6.1.1",
     "@adonisjs/view": "^6.0.8",
