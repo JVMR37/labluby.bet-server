@@ -19,6 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
 
 Route.post('users', 'UsersController.store')
 
@@ -35,4 +36,10 @@ Route.put('passwords', 'ForgotPasswordController.update')
 
 Route.get('/', async () => {
   return { hello: 'world' }
+})
+
+Route.get('health', async ({ response }) => {
+  const report = await HealthCheck.getReport()
+
+  return report.healthy ? response.ok(report) : response.badRequest(report)
 })
