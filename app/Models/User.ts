@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
+import Bet from './Bet'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -15,11 +16,17 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
-  @column()
-  public token: string | null
+  @hasMany(() => Bet)
+  public bets: HasMany<typeof Bet>
 
-  @column.dateTime({ columnName: 'token_created_at' })
-  public tokenCreatedAt: DateTime | null
+  @column()
+  public isAdmin: boolean
+
+  @column({ columnName: 'reset_password_token' })
+  public resetPasswordToken: string | null
+
+  @column.dateTime({ columnName: 'reset_password_token_created_at' })
+  public resetPasswordTokenCreatedAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
