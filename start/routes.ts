@@ -34,10 +34,6 @@ Route.post('sessions', 'SessionsController.store')
 Route.post('passwords', 'ForgotPasswordController.store')
 Route.put('passwords', 'ForgotPasswordController.update')
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
-
 Route.get('health', async ({ response }) => {
   const report = await HealthCheck.getReport()
 
