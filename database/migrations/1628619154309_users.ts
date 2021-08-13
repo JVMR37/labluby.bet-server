@@ -9,8 +9,8 @@ export default class Users extends BaseSchema {
       table.string('name', 254).notNullable()
       table.string('email', 254).notNullable().unique()
       table.string('password', 254).notNullable()
-      table.string('token')
-      table.timestamp('token_created_at', { useTz: true })
+      table.string('reset_password_token')
+      table.timestamp('reset_password_token_created_at', { useTz: true })
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
