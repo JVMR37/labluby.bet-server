@@ -1,4 +1,4 @@
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class BetValidator {
@@ -23,7 +23,16 @@ export default class BetValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({})
+  public schema = schema.create({
+    bets: schema.array([rules.required(), rules.minLength(1)]).members(
+      schema.object().members({
+        numbers: schema.string({}, [rules.required()]),
+        price: schema.number([rules.required()]),
+        typeId: schema.number([rules.required(), rules.exists({ table: 'types', column: 'id' })]),
+      })
+    ),
+    user_id: schema.number([rules.required()]),
+  })
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
