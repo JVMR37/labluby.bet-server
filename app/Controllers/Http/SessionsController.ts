@@ -10,6 +10,8 @@ export default class SessionsController {
     try {
       const authData = await ctx.auth.attempt(email, password)
       const user = await User.findByOrFail('email', email)
+      await user.load('bets')
+
       const userJSON = user.serialize({
         fields: {
           pick: ['id', 'name', 'email', 'is_admin'],
