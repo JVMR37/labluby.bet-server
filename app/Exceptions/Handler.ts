@@ -1,3 +1,5 @@
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
 /*
 |--------------------------------------------------------------------------
 | Http Exception Handler
@@ -19,5 +21,19 @@ import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
 export default class ExceptionHandler extends HttpExceptionHandler {
   constructor() {
     super(Logger)
+  }
+  public async handle(error: any, ctx: HttpContextContract) {
+    this.logger.error(error, ctx)
+    /**
+     * Self handle the validation exception
+     */
+    if (error.code === 'E_VALIDATION_FAILURE') {
+      return ctx.response.status(422).send(error.messages)
+    }
+
+    /**
+     * Forward rest of the exceptions to the parent class
+     */
+    return super.handle(error, ctx)
   }
 }
