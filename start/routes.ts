@@ -29,6 +29,7 @@ Route.group(() => {
   Route.delete('users/:id', 'UsersController.destroy')
 
   Route.resource('types', 'TypesController')
+  Route.resource('bets', 'BetsController')
 }).middleware('auth')
 
 Route.post('sessions', 'SessionsController.store')
