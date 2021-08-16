@@ -16,7 +16,13 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
-  @hasMany(() => Bet)
+  @hasMany(() => Bet, {
+    onQuery(query) {
+      if (!query.isRelatedSubQuery) {
+        query.preload('type')
+      }
+    },
+  })
   public bets: HasMany<typeof Bet>
 
   @column()

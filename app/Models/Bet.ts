@@ -1,10 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasOne, HasOne, BelongsTo, belongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Type from './Type'
+import User from './User'
 
 export default class Bet extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public userId: number
 
   @column()
   public numbers: string
@@ -12,10 +16,14 @@ export default class Bet extends BaseModel {
   @column()
   public price: number
 
-  @hasOne(() => Type, {
+  @belongsTo(() => Type, {
+    foreignKey: 'id',
     serializeAs: 'betType',
   })
-  public type: HasOne<typeof Type>
+  public type: BelongsTo<typeof Type>
+
+  @column()
+  public typeId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
