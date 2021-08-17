@@ -28,8 +28,8 @@ Route.group(() => {
   Route.put('users/:id', 'UsersController.update')
   Route.delete('users/:id', 'UsersController.destroy')
 
-  Route.resource('types', 'TypesController')
-  Route.resource('bets', 'BetsController')
+  Route.resource('types', 'TypesController').apiOnly()
+  Route.resource('bets', 'BetsController').apiOnly()
 }).middleware('auth')
 
 Route.post('sessions', 'SessionsController.store')
