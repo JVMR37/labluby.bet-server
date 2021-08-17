@@ -31,7 +31,6 @@ export default class BetValidator {
         typeId: schema.number([rules.required(), rules.exists({ table: 'types', column: 'id' })]),
       })
     ),
-    user_id: schema.number([rules.required()]),
   })
 
   /**
