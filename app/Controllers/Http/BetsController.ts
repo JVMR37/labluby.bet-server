@@ -1,27 +1,23 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
+import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import Bet from 'App/Models/Bet'
-import Type from 'App/Models/Type'
 import User from 'App/Models/User'
 import BetValidator from 'App/Validators/BetValidator'
 
 export default class BetsController {
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
     await request.validate(BetValidator)
     try {
-      //TODO: Testar para verificar se a criação é feita corretamente com o relacionamento na hora da busca
-
       const newBets = request.input('bets') as Array<Object>
-      const userId = request.input('user_id')
+      const userId = auth.user!.id.toString()
 
       const trx = await Database.transaction()
       const user = await User.query({ client: trx }).where('id', userId).firstOrFail()
-      const types = await Type.all()
+
       let result: Bet | Bet[]
       if (newBets) {
-        // result = await Bet.createMany(newBets)
         result = await user.related('bets').createMany(newBets)
-        // Bet.$getRelation('type').setRelatedForMany(result, types)
       } else {
         const newBet = request.all()
         result = await user.related('bets').create(newBet)
@@ -36,17 +32,48 @@ export default class BetsController {
     }
   }
 
-  public async show({ response }: HttpContextContract) {
-    const bets = await Bet.query().preload('type')
+  public async show({ response, auth }: HttpContextContract) {
+    const userId = auth.user!.id
+
+    const bets = await Bet.query().whereColumn('user_id', userId.toString()).preload('type')
 
     return response.ok(bets)
   }
 
-  public async index({ response }: HttpContextContract) {
-    const bets = await Bet.find(1)
-    const result = await bets!.related('type').query()
+  public async index({ response, auth, request }: HttpContextContract) {
+    const userId = auth.user!.id
+    const { page, filter } = request.qs()
+    let bets: ModelPaginatorContract<Bet>
 
-    return response.ok(result)
+    if (filter) {
+      bets = await Bet.query()
+        .where('user_id', userId.toString())
+        .where('type_id', filter)
+        .orderBy('created_at', 'desc')
+        .preload('type')
+        .paginate(page)
+    } else {
+      bets = await Bet.query()
+        .where('user_id', userId.toString())
+        .preload('type')
+        .orderBy('created_at', 'desc')
+        .paginate(page)
+    }
+
+    const responseData = bets.serialize({
+      fields: {
+        omit: ['type_id', 'updated_at', 'user_id'],
+      },
+      relations: {
+        betType: {
+          fields: {
+            pick: ['id', 'type', 'color'],
+          },
+        },
+      },
+    })
+
+    return response.ok(responseData)
   }
 
   public async update({ params, request, response }: HttpContextContract) {
