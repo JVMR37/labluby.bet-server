@@ -14,21 +14,21 @@ export default class Type extends BaseModel {
   @column()
   public range: number
 
-  @column()
+  @column({ serializeAs: 'maxNumber' })
   public maxNumber: number
 
   @column()
   public price: number
 
-  @column()
+  @column({ serializeAs: 'minCartValue' })
   public minCartValue: number
 
   @column()
   public color: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serializeAs: 'createdAt' })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: 'updatedAt' })
   public updatedAt: DateTime
 }
