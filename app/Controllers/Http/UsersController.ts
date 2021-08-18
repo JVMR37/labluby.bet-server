@@ -8,6 +8,7 @@ export default class UsersController {
 
     const data = ctx.request.only(['name', 'email', 'password'])
     const user = await User.create(data)
+    //TODO: RF01 - Disparar email quando novo usuário for criado
 
     return user
   }

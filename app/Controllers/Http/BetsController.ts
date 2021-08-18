@@ -25,6 +25,8 @@ export default class BetsController {
 
       await trx.commit()
 
+      //TODO: RF01 - Disparar email quando novas apostas forem criadas
+
       return response.ok(result)
     } catch (error) {
       console.log(error)
