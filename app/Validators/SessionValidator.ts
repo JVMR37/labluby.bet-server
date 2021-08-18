@@ -25,7 +25,7 @@ export default class SessionValidator {
    */
   public schema = schema.create({
     email: schema.string({}, [rules.required(), rules.email()]),
-    password: schema.string({}, [rules.required(), rules.confirmed()]),
+    password: schema.string({}, [rules.required()]),
   })
 
   /**
