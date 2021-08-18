@@ -3,10 +3,10 @@ import TypeValidator from 'App/Validators/TypeValidator'
 import Type from 'App/Models/Type'
 
 export default class TypesController {
-  public async index() {
+  public async index({ response }: HttpContextContract) {
     const types = await Type.all()
 
-    return types
+    return response.ok(types)
   }
 
   public async store({ request, response }: HttpContextContract) {
