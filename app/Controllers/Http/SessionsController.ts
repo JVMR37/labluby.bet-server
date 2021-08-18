@@ -17,10 +17,10 @@ export default class SessionsController {
         },
       })
 
-      return {
+      return ctx.response.ok({
         user: userJSON,
         token: authData.token,
-      }
+      })
     } catch (err) {
       console.log(err)
 
