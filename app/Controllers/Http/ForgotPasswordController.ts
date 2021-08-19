@@ -16,8 +16,8 @@ export default class ForgotPasswordController {
       const email = ctx.request.input('email')
       const user = await User.findByOrFail('email', email)
 
-      user.token = crypto.randomBytes(10).toString('hex')
-      user.tokenCreatedAt = DateTime.now()
+      user.resetPasswordToken = crypto.randomBytes(10).toString('hex')
+      user.resetPasswordTokenCreatedAt = DateTime.now()
 
       await user.save()
 
@@ -29,14 +29,14 @@ export default class ForgotPasswordController {
           .htmlView('emails/forgot_password', {
             email,
             name: user.name,
-            token: user.token,
-            link: `${ctx.request.input('redirect_url')}?token=${user.token}`,
+            token: user.resetPasswordToken,
+            link: `${ctx.request.input('redirect_url')}?token=${user.resetPasswordToken}`,
           })
         message.textView('emails/forgot_password_plain', {
           email,
           name: user.name,
-          token: user.token,
-          link: `${ctx.request.input('redirect_url')}?token=${user.token}`,
+          token: user.resetPasswordToken,
+          link: `${ctx.request.input('redirect_url')}?token=${user.resetPasswordToken}`,
         })
       })
     } catch (err) {
@@ -53,14 +53,14 @@ export default class ForgotPasswordController {
 
       const user = await User.findByOrFail('token', token)
 
-      const tokenExpired = moment().subtract('2', 'days').isAfter(user.tokenCreatedAt)
+      const tokenExpired = moment().subtract('2', 'days').isAfter(user.resetPasswordToken)
 
       if (tokenExpired) {
         return response.status(401).send({ error: { message: 'Token expirado !' } })
       }
 
-      user.token = null
-      user.tokenCreatedAt = null
+      user.resetPasswordToken = null
+      user.resetPasswordTokenCreatedAt = null
       user.password = password
 
       await user.save()
