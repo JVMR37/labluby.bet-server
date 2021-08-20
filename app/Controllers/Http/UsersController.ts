@@ -1,16 +1,30 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import UserValidator from 'App/Validators/UserValidator'
+import Mail from '@ioc:Adonis/Addons/Mail'
 
 export default class UsersController {
   public async store(ctx: HttpContextContract) {
     await ctx.request.validate(UserValidator)
 
-    const data = ctx.request.only(['name', 'email', 'password'])
-    const user = await User.create(data)
-    //TODO: RF01 - Disparar email quando novo usuário for criado
+    try {
+      const data = ctx.request.only(['name', 'email', 'password'])
+      const user = await User.create(data)
 
-    return user
+      await Mail.sendLater((message) => {
+        message
+          .from('fale-conosco@labluby.bet')
+          .to(user.email)
+          .subject('Seja bem-vindo : )')
+          .htmlView('emails/welcome', {
+            name: user.name,
+          })
+      })
+
+      return user
+    } catch (error) {
+      return ctx.response.badRequest(error)
+    }
   }
 
   public async show(ctx: HttpContextContract) {
