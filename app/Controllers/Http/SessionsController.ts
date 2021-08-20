@@ -18,7 +18,7 @@ export default class SessionsController {
       })
 
       return ctx.response.ok({
-        user: userJSON,
+        ...userJSON,
         token: authData.token,
       })
     } catch (err) {
