@@ -2,18 +2,21 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import Bet from 'App/Models/Bet'
-import User from 'App/Models/User'
 import BetValidator from 'App/Validators/BetValidator'
+import Mail from '@ioc:Adonis/Addons/Mail'
+import Logger from '@ioc:Adonis/Core/Logger'
 
 export default class BetsController {
   public async store({ request, response, auth }: HttpContextContract) {
     await request.validate(BetValidator)
     try {
       const newBets = request.input('bets') as Array<Object>
-      const userId = auth.user!.id.toString()
+      const user = auth.user!
+
+      Logger.info('User Auth:', user)
 
       const trx = await Database.transaction()
-      const user = await User.query({ client: trx }).where('id', userId).firstOrFail()
+      // const user = await User.query({ client: trx }).where('id', userId).firstOrFail()
 
       let result: Bet | Bet[]
       if (newBets) {
@@ -25,7 +28,18 @@ export default class BetsController {
 
       await trx.commit()
 
-      //TODO: RF01 - Disparar email quando novas apostas forem criadas
+      const createdAtDate = result instanceof Bet ? result.createdAt : result[0].createdAt
+
+      await Mail.sendLater((message) => {
+        message
+          .from('fale-conosco@labluby.bet')
+          .to(user.email)
+          .subject('Nova Aposta Realizada com sucesso !')
+          .htmlView('emails/new_bet', {
+            name: user.name,
+            date: createdAtDate.toFormat('MMMM D, YYYY at HH:mm'),
+          })
+      })
 
       return response.ok(result)
     } catch (error) {
