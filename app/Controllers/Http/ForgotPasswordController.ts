@@ -2,6 +2,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Mail from '@ioc:Adonis/Addons/Mail'
 
 import User from 'App/Models/User'
+import Logger from '@ioc:Adonis/Core/Logger'
 import { DateTime } from 'luxon'
 import crypto from 'crypto'
 import moment from 'moment'
@@ -10,9 +11,8 @@ import ResetPasswordValidator from 'App/Validators/ResetPasswordValidator'
 
 export default class ForgotPasswordController {
   public async store(ctx: HttpContextContract) {
+    await ctx.request.validate(ForgotPasswordValidator)
     try {
-      await ctx.request.validate(ForgotPasswordValidator)
-
       const email = ctx.request.input('email')
       const user = await User.findByOrFail('email', email)
 
@@ -21,7 +21,7 @@ export default class ForgotPasswordController {
 
       await user.save()
 
-      await Mail.send((message) => {
+      await Mail.sendLater((message) => {
         message
           .from('fale-conosco@labluby.bet')
           .to(user.email)
@@ -51,9 +51,9 @@ export default class ForgotPasswordController {
 
       const { token, password } = request.all()
 
-      const user = await User.findByOrFail('token', token)
+      const user = await User.findByOrFail('reset_password_token', token)
 
-      const tokenExpired = moment().subtract('2', 'days').isAfter(user.resetPasswordToken)
+      const tokenExpired = moment().subtract('2', 'days').isAfter(user.resetPasswordTokenCreatedAt)
 
       if (tokenExpired) {
         return response.status(401).send({ error: { message: 'Token expirado !' } })
@@ -65,7 +65,8 @@ export default class ForgotPasswordController {
 
       await user.save()
     } catch (err) {
-      return response.status(err.status).send({
+      Logger.error(err)
+      return response.badRequest({
         error: { message: 'Não foi possível resetar sua senha : (' },
       })
     }
