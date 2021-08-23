@@ -9,7 +9,13 @@ export default class Bet extends BaseModel {
   @column()
   public userId: number
 
-  @column()
+  @column({
+    serialize: (value: string) => {
+      return value.split(' ').map((number) => {
+        return Number(number)
+      })
+    },
+  })
   public numbers: string
 
   @column()
@@ -23,7 +29,10 @@ export default class Bet extends BaseModel {
   @column()
   public typeId: number
 
-  @column.dateTime({ autoCreate: true, serializeAs: 'createdAt' })
+  @column.dateTime({
+    autoCreate: true,
+    serializeAs: 'createdAt',
+  })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: 'updatedAt' })
