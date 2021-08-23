@@ -5,7 +5,8 @@
     "@adonisjs/core/commands",
     "@adonisjs/repl/build/commands",
     "@adonisjs/lucid/build/commands",
-    "@adonisjs/mail/build/commands"
+    "@adonisjs/mail/build/commands",
+    "adonis5-swagger/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -26,7 +27,8 @@
     "@adonisjs/mail",
     "@adonisjs/session",
     "@adonisjs/view",
-    "@adonisjs/redis"
+    "@adonisjs/redis",
+    "adonis5-swagger"
   ],
   "aceProviders": [
     "@adonisjs/repl"

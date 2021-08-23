@@ -33,7 +33,8 @@
       "@adonisjs/mail",
       "@adonisjs/session",
       "@adonisjs/view",
-      "@adonisjs/redis"
+      "@adonisjs/redis",
+      "adonis5-swagger"
     ]
   }
 }

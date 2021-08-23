@@ -7,6 +7,25 @@ import Mail from '@ioc:Adonis/Addons/Mail'
 import Logger from '@ioc:Adonis/Core/Logger'
 
 export default class BetsController {
+  /**
+   * @swagger
+   * /api/hello:
+   *   post:
+   *     tags:
+   *       - Bet
+   *     summary: Sample API
+   *     parameters:
+   *       - name: name
+   *         description: Name of the user
+   *         in: query
+   *         required: false
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Send hello message
+   *         example:
+   *           message: Hello Guess
+   */
   public async store({ request, response, auth }: HttpContextContract) {
     await request.validate(BetValidator)
     try {
@@ -48,6 +67,25 @@ export default class BetsController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/hello/:id:
+   *   get:
+   *     tags:
+   *       - Bet
+   *     summary: Sample API
+   *     parameters:
+   *       - name: name
+   *         description: Name of the user
+   *         in: query
+   *         required: false
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Send hello message
+   *         example:
+   *           message: Hello Guess
+   */
   public async show({ response, auth }: HttpContextContract) {
     const userId = auth.user!.id
 
@@ -56,6 +94,25 @@ export default class BetsController {
     return response.ok(bets)
   }
 
+  /**
+   * @swagger
+   * /api/hello/:
+   *   get:
+   *     tags:
+   *       - Bet
+   *     summary: Sample API
+   *     parameters:
+   *       - name: name
+   *         description: Name of the user
+   *         in: query
+   *         required: false
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Send hello message
+   *         example:
+   *           message: Hello Guess
+   */
   public async index({ response, auth, request }: HttpContextContract) {
     const userId = auth.user!.id
     const { page, filter } = request.qs()
@@ -92,6 +149,25 @@ export default class BetsController {
     return response.ok(responseData)
   }
 
+  /**
+   * @swagger
+   * /api/hello/:id:
+   *   patch:
+   *     tags:
+   *       - Bet
+   *     summary: Sample API
+   *     parameters:
+   *       - name: name
+   *         description: Name of the user
+   *         in: query
+   *         required: false
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Send hello message
+   *         example:
+   *           message: Hello Guess
+   */
   public async update({ params, request, response }: HttpContextContract) {
     const betId = params.id
     try {
@@ -106,6 +182,25 @@ export default class BetsController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/hello/:id:
+   *   delete:
+   *     tags:
+   *       - Bet
+   *     summary: Sample API
+   *     parameters:
+   *       - name: name
+   *         description: Name of the user
+   *         in: query
+   *         required: false
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Send hello message
+   *         example:
+   *           message: Hello Guess
+   */
   public async destroy({ params, response }: HttpContextContract) {
     const betId = params.id
     try {
