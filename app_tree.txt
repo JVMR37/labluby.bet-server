@@ -1,0 +1,26 @@
+app
+├── Controllers
+│   └── Http
+│       ├── BetsController.ts
+│       ├── ForgotPasswordController.ts
+│       ├── SessionsController.ts
+│       ├── TypesController.ts
+│       └── UsersController.ts
+├── Exceptions
+│   └── Handler.ts
+├── Middleware
+│   ├── Auth.ts
+│   └── SilentAuth.ts
+├── Models
+│   ├── Bet.ts
+│   ├── Type.ts
+│   └── User.ts
+└── Validators
+    ├── BetValidator.ts
+    ├── ForgotPasswordValidator.ts
+    ├── ResetPasswordValidator.ts
+    ├── SessionValidator.ts
+    ├── TypeValidator.ts
+    └── UserValidator.ts
+
+6 directories, 17 files
