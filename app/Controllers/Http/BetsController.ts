@@ -135,7 +135,7 @@ export default class BetsController {
 
     const responseData = bets.serialize({
       fields: {
-        omit: ['type_id', 'updated_at', 'user_id'],
+        omit: ['type_id', 'updatedAt', 'user_id'],
       },
       relations: {
         betType: {
