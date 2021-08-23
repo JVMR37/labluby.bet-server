@@ -32,22 +32,25 @@ export default class BetsController {
       const newBets = request.input('bets') as Array<Object>
       const user = auth.user!
 
-      Logger.info('User Auth:', user)
+      Logger.info('User Auth:' + user)
 
       const trx = await Database.transaction()
       // const user = await User.query({ client: trx }).where('id', userId).firstOrFail()
 
-      let result: Bet | Bet[]
+      let result: Bet[]
+
       if (newBets) {
-        result = await user.related('bets').createMany(newBets)
-      } else {
-        const newBet = request.all()
-        result = await user.related('bets').create(newBet)
+        result = await user.related('bets').createMany(
+          newBets.map((bet: any) => {
+            bet.numbers = bet.numbers.join(' ')
+            return bet
+          })
+        )
       }
 
       await trx.commit()
 
-      const createdAtDate = result instanceof Bet ? result.createdAt : result[0].createdAt
+      const createdAtDate = result![0].createdAt
 
       await Mail.sendLater((message) => {
         message
@@ -60,7 +63,7 @@ export default class BetsController {
           })
       })
 
-      return response.ok(result)
+      return response.ok(result!)
     } catch (error) {
       console.log(error)
       return response.badRequest(error)
@@ -116,6 +119,7 @@ export default class BetsController {
   public async index({ response, auth, request }: HttpContextContract) {
     const userId = auth.user!.id
     const { page, filter } = request.qs()
+    Logger.info('Get Bets: \nPage -> ' + page + '\nFilter -> ' + filter)
     let bets: ModelPaginatorContract<Bet>
 
     if (filter) {
