@@ -26,7 +26,7 @@ export default class BetValidator {
   public schema = schema.create({
     bets: schema.array([rules.required(), rules.minLength(1)]).members(
       schema.object().members({
-        numbers: schema.string({}, [rules.required()]),
+        numbers: schema.array([rules.required(), rules.minLength(1)]).members(schema.number()),
         price: schema.number([rules.required()]),
         typeId: schema.number([rules.required(), rules.exists({ table: 'types', column: 'id' })]),
       })
