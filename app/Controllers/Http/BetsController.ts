@@ -32,8 +32,6 @@ export default class BetsController {
       const newBets = request.input('bets') as Array<Object>
       const user = auth.user!
 
-      Logger.info('User Auth:' + user)
-
       const trx = await Database.transaction()
       // const user = await User.query({ client: trx }).where('id', userId).firstOrFail()
 
@@ -59,7 +57,7 @@ export default class BetsController {
           .subject('Nova Aposta Realizada com sucesso !')
           .htmlView('emails/new_bet', {
             name: user.name,
-            date: createdAtDate.toFormat('MMMM D, YYYY at HH:mm'),
+            date: createdAtDate.toFormat("MMMM dd, yyyy 'at' HH:mm"),
           })
       })
 
