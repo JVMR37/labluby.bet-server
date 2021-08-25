@@ -126,13 +126,13 @@ export default class BetsController {
         .where('type_id', filter)
         .orderBy('created_at', 'desc')
         .preload('type')
-        .paginate(page)
+        .paginate(page, 5)
     } else {
       bets = await Bet.query()
         .where('user_id', userId.toString())
         .preload('type')
         .orderBy('created_at', 'desc')
-        .paginate(page)
+        .paginate(page, 5)
     }
 
     const responseData = bets.serialize({
