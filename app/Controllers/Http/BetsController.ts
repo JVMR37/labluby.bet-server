@@ -117,22 +117,30 @@ export default class BetsController {
   public async index({ response, auth, request }: HttpContextContract) {
     const userId = auth.user!.id
     const { page, filter } = request.qs()
+    const betsPerPage = 5
+
     Logger.info('Get Bets: \nPage -> ' + page + '\nFilter -> ' + filter)
+
     let bets: ModelPaginatorContract<Bet>
 
     if (filter) {
+      const binds = (filter as Array<string>).reduce(
+        (acc, _) => (acc === '' ? '?' : acc + ',' + '?'),
+        ''
+      )
+
       bets = await Bet.query()
         .where('user_id', userId.toString())
-        .where('type_id', filter)
+        .whereRaw(`type_id in (${binds})`, filter)
         .orderBy('created_at', 'desc')
         .preload('type')
-        .paginate(page, 5)
+        .paginate(page, betsPerPage)
     } else {
       bets = await Bet.query()
         .where('user_id', userId.toString())
         .preload('type')
         .orderBy('created_at', 'desc')
-        .paginate(page, 5)
+        .paginate(page, betsPerPage)
     }
 
     const responseData = bets.serialize({
