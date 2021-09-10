@@ -38,6 +38,10 @@ const redisConfig: RedisConfig = {
     local: {
       host: Env.get('REDIS_HOST'),
       port: Env.get('REDIS_PORT'),
+
+      tls: {
+        rejectUnauthorized: false,
+      },
       password: Env.get('REDIS_PASSWORD', ''),
       db: 0,
       keyPrefix: '',
