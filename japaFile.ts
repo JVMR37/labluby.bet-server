@@ -28,11 +28,20 @@ async function startHttpServer() {
   // await execa.node('ace', ['serve'])
 }
 
+function getTestFiles() {
+  let userDefined = process.argv.slice(2)[0]
+  if (!userDefined) {
+    return 'test/**/*.spec.ts'
+  }
+
+  return `${userDefined.replace(/\.ts$|\.js$/, '')}.ts`
+}
+
 /**
  * Configure test runner
  */
 configure({
-  files: ['test/**/*.spec.ts'],
+  files: getTestFiles(),
   before: [runMigrations, startHttpServer],
   after: [rollbackMigrations],
 })
