@@ -3,8 +3,9 @@ import test from 'japa'
 import url from '../base_url'
 import User from 'App/Models/User'
 import Type from 'App/Models/Type'
+import Bet from 'App/Models/Bet'
 
-test.group('Types tests', (group) => {
+test.group('Bet tests', (group) => {
   let AUTH_TOKEN: string
 
   group.before(async () => {
@@ -55,5 +56,10 @@ test.group('Types tests', (group) => {
       .set('Authorization', 'bearer ' + AUTH_TOKEN)
       .send({ bets: [newBet] })
       .expect(200)
+  })
+
+  group.after(async () => {
+    await Bet.query().delete()
+    await Type.query().delete()
   })
 })

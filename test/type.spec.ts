@@ -110,7 +110,7 @@ test.group('Types tests', (group) => {
       minCartValue: 30,
     }
 
-    const typeIdToUpdate = 1
+    const typeIdToUpdate = 2
     await supertest(url)
       .put(`/types/${typeIdToUpdate}`)
       .set('Authorization', 'bearer ' + AUTH_TOKEN)
@@ -127,7 +127,7 @@ test.group('Types tests', (group) => {
   })
 
   test('Get Type infos by valid id', async (assert) => {
-    const typeIdToRetrieve = 1
+    const typeIdToRetrieve = 2
 
     const response = await supertest(url)
       .get(`/types/${typeIdToRetrieve}`)
@@ -160,7 +160,7 @@ test.group('Types tests', (group) => {
   })
 
   test('Delete Type by valid id', async (_) => {
-    const typeIdToDelete = 1
+    const typeIdToDelete = 2
 
     const response = await supertest(url)
       .delete(`/types/${typeIdToDelete}`)
@@ -168,11 +168,11 @@ test.group('Types tests', (group) => {
       .expect(200)
   })
 
-  group.after(async () => {
-    const response = await supertest(url)
-      .get(`/types`)
-      .set('Authorization', 'bearer ' + AUTH_TOKEN)
-      .expect(200)
-    console.log(response.body)
-  })
+  // group.after(async () => {
+  //   const response = await supertest(url)
+  //     .get(`/types`)
+  //     .set('Authorization', 'bearer ' + AUTH_TOKEN)
+  //     .expect(200)
+  //   console.log(response.body)
+  // })
 })

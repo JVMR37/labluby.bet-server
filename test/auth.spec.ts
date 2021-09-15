@@ -1,7 +1,6 @@
 import User from 'App/Models/User'
 import test from 'japa'
 import supertest from 'supertest'
-import Logger from '@ioc:Adonis/Core/Logger'
 import url from '../base_url'
 
 test.group('Auth tests', (group) => {
@@ -20,8 +19,6 @@ test.group('Auth tests', (group) => {
     }
 
     const result = await supertest(url).post('/sessions').send(userCredentials)
-
-    Logger.info('Response body:\n%o', result.body)
 
     assert.hasAllKeys(result.body, ['email', 'id', 'name', 'token', 'is_admin'])
   })
