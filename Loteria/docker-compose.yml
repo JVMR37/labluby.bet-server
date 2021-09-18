@@ -1,0 +1,35 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/app/Labluby.bet-server
+    ports:
+      - '3333:3333'
+    depends_on:
+      - migration
+
+  migration:
+    build: .
+    restart: 'no'
+    command: node ace migration:run
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Labluby.bet
+    volumes:
+      - ./postgres_data:/var/lib/postgressql/data
+
+  redis:
+    image: redis
+    ports:
+      - '6380:6379'

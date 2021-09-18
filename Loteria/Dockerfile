@@ -1,12 +1,12 @@
-FROM node:alpine
+FROM node:lts-alpine
 
-WORKDIR /home/rey/app
+WORKDIR /usr/app/Labluby.bet-server
 
-COPY package*.json ./
+COPY package*.json yarn.* ./
 RUN npm install
 
 COPY . . 
 
 EXPOSE 3333
 
-CMD ['node', 'ace', 'serve', '--watch']
+CMD ["npm", "run", "dev"]

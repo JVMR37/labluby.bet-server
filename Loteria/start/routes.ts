@@ -40,5 +40,7 @@ Route.put('passwords', 'ForgotPasswordController.update')
 Route.get('health', async ({ response }) => {
   const report = await HealthCheck.getReport()
 
+  console.log(report)
+
   return report.healthy ? response.ok(report) : response.badRequest(report)
 })
