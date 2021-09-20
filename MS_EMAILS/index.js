@@ -1,5 +1,7 @@
+"use strict";
 const express = require("express");
 const { Kafka } = require("kafkajs");
+const emailSender = require("./email_sender");
 const app = express();
 const port = 3000;
 
@@ -47,6 +49,7 @@ app.listen(port, async () => {
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
+      emailSender();
       console.log({
         value: message.value.toString(),
       });
