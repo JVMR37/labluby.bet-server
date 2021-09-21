@@ -34,7 +34,8 @@
       "@adonisjs/session",
       "@adonisjs/view",
       "@adonisjs/redis",
-      "adonis5-swagger"
+      "adonis5-swagger",
+      "adonis5-scheduler"
     ]
   }
 }
