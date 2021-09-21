@@ -5,6 +5,7 @@ import Bet from 'App/Models/Bet'
 import BetValidator from 'App/Validators/BetValidator'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import Logger from '@ioc:Adonis/Core/Logger'
+import Event from '@ioc:Adonis/Core/Event'
 
 export default class BetsController {
   /**
@@ -48,7 +49,7 @@ export default class BetsController {
 
       await trx.commit()
 
-      const createdAtDate = result![0].createdAt
+      const createdAtDateString = result![0].createdAt.toFormat("MMMM dd, yyyy 'at' HH:mm")
 
       await Mail.sendLater((message) => {
         message
@@ -57,8 +58,14 @@ export default class BetsController {
           .subject('Nova Aposta Realizada com sucesso !')
           .htmlView('emails/new_bet', {
             name: user.name,
-            date: createdAtDate.toFormat("MMMM dd, yyyy 'at' HH:mm"),
+            date: createdAtDateString,
           })
+      })
+
+      Event.emit('new:bet', {
+        amountOfBets: result!.length,
+        userName: user.name,
+        createdAtDate: createdAtDateString,
       })
 
       return response.ok(result!)
