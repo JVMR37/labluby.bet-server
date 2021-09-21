@@ -8,7 +8,7 @@
     "dev": "node ace serve --watch",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
-    "test":"node -r @adonisjs/assembler/build/register japaFile.ts",
+    "test": "node -r @adonisjs/assembler/build/register japaFile.ts",
     "coverage": "nyc yarn test"
   },
   "devDependencies": {
@@ -43,6 +43,7 @@
     "@adonisjs/view": "^6.0.8",
     "adonis5-swagger": "^1.3.3",
     "ioredis": "^4.27.7",
+    "kafkajs": "^1.15.0",
     "luxon": "^2.0.2",
     "moment": "^2.29.1",
     "pg": "^8.7.1",
