@@ -10,10 +10,16 @@ export default class Users extends BaseSchema {
       table.string('email', 254).notNullable().unique()
       table.string('password', 254).notNullable()
       table.string('reset_password_token')
-      table.timestamp('reset_password_token_created_at', { useTz: true })
+      table.enu('user_type', ['PLAYER', 'ADMIN'], {
+        useNative: true,
+        enumName: 'user_type',
+        existingType: false,
+      })
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
+      table.timestamp('reset_password_token_created_at', { useTz: true })
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

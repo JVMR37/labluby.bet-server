@@ -26,7 +26,7 @@ export default class User extends BaseModel {
   public bets: HasMany<typeof Bet>
 
   @column()
-  public isAdmin: boolean
+  public userType: boolean
 
   @column({ columnName: 'reset_password_token' })
   public resetPasswordToken: string | null

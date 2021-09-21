@@ -31,6 +31,7 @@ export default class UserValidator {
       rules.unique({ table: 'users', column: 'email', caseInsensitive: true }),
     ]),
     password: schema.string({}, [rules.required()]),
+    userType: schema.enum(['ADMIN', 'PLAYER'] as const, [rules.required()]),
   })
 
   /**

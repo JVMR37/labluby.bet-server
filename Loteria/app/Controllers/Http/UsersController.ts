@@ -8,7 +8,7 @@ export default class UsersController {
     await ctx.request.validate(UserValidator)
 
     try {
-      const data = ctx.request.only(['name', 'email', 'password'])
+      const data = ctx.request.only(['name', 'email', 'password', 'userType'])
       const user = await User.create(data)
 
       await Mail.sendLater((message) => {
