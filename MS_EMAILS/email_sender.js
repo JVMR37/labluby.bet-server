@@ -6,8 +6,9 @@ const { promisify } = require("util");
 const readFile = promisify(fs.readFile);
 const handlebars = require("handlebars");
 
-module.exports = async function emailSender(admin_emails, bet_id) {
-  console.log("Aloha");
+module.exports = async function emailSender(message) {
+  const messageObject = JSON.parse(message);
+  console.log(messageObject);
   let testAccount = await nodemailer.createTestAccount();
 
   // create reusable transporter object using the default SMTP transport
@@ -24,15 +25,17 @@ module.exports = async function emailSender(admin_emails, bet_id) {
   let html = await readFile("./resources/new_bet.html", "utf8");
   let template = handlebars.compile(html);
   let data = {
-    name: "Aloha Mano",
+    username: messageObject.userName,
+    amountOfBets: messageObject.amountOfBets,
+    date: messageObject.createdAtDate,
   };
   let htmlToSend = template(data);
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: 'Kafka Ghost 👻" <mensageria@labluby.bet>', // sender address
-    to: admin_emails, // list of receivers
-    subject: "New Bet ✔", // Subject line
+    to: messageObject.adminsEmails, // list of receivers
+    subject: "New Bets ✔", // Subject line
     text: "Hello world?", // plain text body
     html: htmlToSend,
   });
