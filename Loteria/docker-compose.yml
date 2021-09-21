@@ -20,6 +20,14 @@ services:
     depends_on:
       - postgres
 
+  app_scheduler:
+    build: .
+    restart: 'always'
+    command: node ace scheduler:run
+    network_mode: host
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres
     ports:
