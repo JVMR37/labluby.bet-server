@@ -10,11 +10,13 @@ services:
       - '3333:3333'
     depends_on:
       - migration
+    network_mode: host
 
   migration:
     build: .
     restart: 'no'
     command: node ace migration:run
+    network_mode: host
     depends_on:
       - postgres
 
